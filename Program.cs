@@ -23,11 +23,11 @@ namespace sgp
       ItemPedido item4 = new ItemPedido(prod4, 1);
       ItemPedido item5 = new ItemPedido(prod5, 1);
 
-      pedido.Itens.Add(item1);
-      pedido.Itens.Add(item2);
-      pedido.Itens.Add(item3);
-      pedido.Itens.Add(item4);
-      pedido.Itens.Add(item5);
+      pedido.AdicionarItem(item1);
+      pedido.AdicionarItem(item2);
+      pedido.AdicionarItem(item3);
+      pedido.AdicionarItem(item4);
+      pedido.AdicionarItem(item5);
 
       Console.WriteLine(pedido.ObterTotal());
     }

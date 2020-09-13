@@ -4,7 +4,19 @@ namespace sgp.Models
 {
   public class ControleEstoqueVenda
   {
-    public List<Loja> Lojas { get; set; }
+    private List<Loja> Lojas { get; set; }
+    private List<SetorEntrega> SetorEntregas { get; set; }
+
+    public ControleEstoqueVenda()
+    {
+      this.Lojas = new List<Loja>();
+      this.SetorEntregas = new List<SetorEntrega>();
+    }
+
+    public void AdicionarNovaEntrega(SetorEntrega entrega)
+    {
+      this.SetorEntregas.Add(entrega);
+    }
 
   }
 }
