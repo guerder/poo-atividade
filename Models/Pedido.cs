@@ -11,6 +11,7 @@ namespace sgp.Models
     public string NomeCliente { get; set; }
     public string NomeVendedor { get; set; }
     public List<ItemPedido> Itens { get; set; }
+    public Loja Loja { get; set; }
 
     public Pedido(string nomeCliente, string nomeVendedor)
     {
