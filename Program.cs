@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using sgp.Models;
+using sgp.Models.Enums;
 
 namespace sgp
 {
@@ -7,6 +10,20 @@ namespace sgp
   {
     static void Main(string[] args)
     {
+
+      var menus = new List<Menu>(){
+        new Menu(1, "Lojas", 0),
+        new Menu(2, "Produtos", 0),
+        new Menu(3, "Pedidos", 0),
+        new Menu(4, "Cadastrar Loja", 1),
+        new Menu(5, "Visualizar Lojas", 1),
+        new Menu(6, "Cadastrar Produto", 2),
+        new Menu(7, "Visualizar Produtos", 2),
+        new Menu(8, "Realizar Pedido", 3),
+        new Menu(9, "Despachar Pedido", 3),
+      };
+
+
       Produto prod1 = new Produto(1, "Smartphone", 1005);
       Produto prod2 = new Produto(2, "Mouse", 199.50);
       Produto prod3 = new Produto(3, "SmartTV", 2475.2);
@@ -29,7 +46,11 @@ namespace sgp
       pedido.AdicionarItem(item4);
       pedido.AdicionarItem(item5);
 
-      Console.WriteLine(pedido.ObterTotal());
+      Console.WriteLine((Status)1);
+
+      BuilderMenu builder = new BuilderMenu(menus);
+
+      builder.Build();
     }
   }
 }
