@@ -14,21 +14,21 @@ namespace sgp.Services
       _controle = new ControleEstoqueVenda();
 
       // Abre o arquivo para ler os dados
-      FileStream fs = new FileStream("data.bin", FileMode.Open);
       try
       {
+        FileStream fs = new FileStream("data.bin", FileMode.Open);
         // Cria um objeto BinaryFormatter para realizar a dessarialização
         BinaryFormatter bf = new BinaryFormatter();
         // Usa o objeto BinaryFormatter para desserializar os dados do arquivo
         _controle = (ControleEstoqueVenda)bf.Deserialize(fs);
+        // fecha o arquivo
+        fs.Close();
       }
       catch
       {
       }
       finally
       {
-        // fecha o arquivo
-        fs.Close();
       }
 
       Console.ReadKey();
@@ -172,13 +172,21 @@ namespace sgp.Services
 
     public void ExibirProdutos()
     {
-
-      Console.WriteLine("Produto \t Valor \t Qtd \t Loja");
+      Console.WriteLine("");
+      Console.WriteLine("".PadRight(100, '_'));
+      Console.WriteLine(
+        "PRODUTO".PadRight(25, ' ') +
+        "VALOR".PadRight(25, ' ') +
+        "QUANTIDADE".PadRight(25, ' ') +
+        "LOJA".PadRight(25, ' '));
       foreach (var loja in _controle.GetLojas())
       {
         foreach (var estoque in loja.Estoques)
         {
-          Console.WriteLine($"{estoque.Produto.Nome} \t {estoque.Produto.Preco} \t {estoque.Quantidade} {loja.Nome}");
+          Console.WriteLine($"{estoque.Produto.Nome}".PadRight(25, '.') +
+                  $"R$ {estoque.Produto.Preco}".PadRight(25, '.') +
+                  $"{estoque.Quantidade}".PadRight(25, '.') +
+                  $"{loja.Nome}".PadRight(25, '.'));
         }
       }
       Console.WriteLine("\nPressione Enter...");
