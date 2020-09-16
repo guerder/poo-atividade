@@ -20,8 +20,10 @@ namespace sgp.Models
       Console.WriteLine("".PadRight(100, '#'));
       Console.WriteLine();
     }
-    public void Build(int parent = 0)
+    public int Build(int parent = 0)
     {
+      int idReturn;
+
       int option = 0;
 
       Console.Clear();
@@ -68,25 +70,23 @@ namespace sgp.Models
         Console.WriteLine("\n Opção inválida! Pressione Enter e tente novamente.");
         Console.ReadKey();
 
-        Build(parent);
+        idReturn = Build(parent);
       }
       else
       {
         int idMenu = numbersOption[option];
-        // var isChildren = Menus.Select(x => x.Parent == idMenu).Any();
-        var isChildren = Menus.FirstOrDefault(x => x.Parent == idMenu);
 
-        if (isChildren != null)
+        if (Menus.Exists(x => x.Parent == idMenu))
         {
-          Build(idMenu);
+          idReturn = Build(idMenu);
         }
         else
         {
-          Console.Clear();
-          Console.WriteLine("\n Aqui vai ser adicionado a ação selecionada");
-          Console.ReadKey();
+          idReturn = idMenu;
         }
       }
+
+      return idReturn;
     }
   }
 }

@@ -3,6 +3,7 @@ using sgp.Models.Enums;
 
 namespace sgp.Models
 {
+  [Serializable]
   public class SetorEntrega
   {
     public DateTime DataDespacho { get; set; }

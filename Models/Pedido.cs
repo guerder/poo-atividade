@@ -5,6 +5,7 @@ using sgp.Models.Enums;
 
 namespace sgp.Models
 {
+  [Serializable]
   public class Pedido
   {
     public DateTime Data { get; set; }

@@ -1,5 +1,8 @@
+using System;
+
 namespace sgp.Models
 {
+  [Serializable]
   public class ItemPedido
   {
     public Produto Produto { get; set; }
