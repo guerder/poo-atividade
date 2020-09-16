@@ -6,10 +6,10 @@ namespace sgp.Models
   public class ItemPedido
   {
     public Produto Produto { get; set; }
-    public long Quantidade { get; set; }
+    public int Quantidade { get; set; }
     public double Desconto { get; set; }
 
-    public ItemPedido(Produto produto, long quantidade, double desconto = 0)
+    public ItemPedido(Produto produto, int quantidade, double desconto = 0)
     {
       this.Produto = produto;
       this.Quantidade = quantidade;

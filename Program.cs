@@ -19,8 +19,9 @@ namespace sgp
         new Menu(5, "Visualizar Lojas", 1),
         new Menu(6, "Cadastrar Produto", 2),
         new Menu(7, "Visualizar Produtos", 2),
-        new Menu(8, "Realizar Pedido", 3),
-        new Menu(9, "Despachar Pedido", 3),
+        new Menu(8, "Excluir Produto", 2),
+        new Menu(9, "Realizar Pedido", 3),
+        new Menu(10, "Despachar Pedido", 3),
       };
 
       BuilderMenu builder = new BuilderMenu(menus);

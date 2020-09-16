@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace sgp.Models
 {
@@ -33,6 +34,32 @@ namespace sgp.Models
     public List<Loja> GetLojas()
     {
       return Lojas;
+    }
+
+    public int nextIdProduto()
+    {
+      int lastId = 0;
+      try
+      {
+        lastId = ListarProdutos().Select(x => x.Codigo).Max();
+
+      }
+      catch { }
+      return ++lastId;
+    }
+
+    public List<Produto> ListarProdutos()
+    {
+      List<Produto> lista = new List<Produto>();
+
+      foreach (var loja in Lojas)
+      {
+        foreach (var estoque in loja.Estoques)
+        {
+          lista.Add(estoque.Produto);
+        }
+      }
+      return lista;
     }
 
   }
