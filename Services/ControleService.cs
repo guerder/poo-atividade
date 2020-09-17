@@ -43,6 +43,7 @@ namespace sgp.Services
       {
         Console.WriteLine("");
         Console.WriteLine("Loja não selecionada");
+        Console.Write("\nPressione Enter...");
         Console.ReadKey();
         return;
       }
@@ -82,19 +83,16 @@ namespace sgp.Services
     {
       if (_controle.GetLojas().Count == 0)
       {
-        Console.WriteLine("");
         Console.WriteLine("Não existem lojas cadastradas!");
         Console.ReadKey();
         return;
       }
 
-      Console.WriteLine("");
-      Console.WriteLine("".PadRight(100, '-'));
       for (int i = 0; i < _controle.GetLojas().Count; i++)
       {
         Console.WriteLine($"{i + 1}. {_controle.GetLojas()[i].Nome}");
       }
-      Console.WriteLine("\nPressione Enter...");
+      Console.Write("\nPressione Enter...");
       Console.ReadKey();
     }
 
@@ -153,12 +151,10 @@ namespace sgp.Services
     {
       if (_controle.ListarProdutos().Count == 0)
       {
-        Console.WriteLine("");
         Console.WriteLine("Não existem produtos cadastrados!");
         Console.ReadKey();
         return;
       }
-      Console.WriteLine("");
       Console.WriteLine("".PadRight(100, '_'));
       Console.WriteLine(
           "CÓDIGO".PadRight(19, ' ') + " " +
@@ -180,7 +176,7 @@ namespace sgp.Services
             );
         }
       }
-      Console.WriteLine("\nPressione Enter...");
+      Console.Write("\nPressione Enter...");
       Console.ReadKey();
     }
 
@@ -355,7 +351,7 @@ namespace sgp.Services
       }
       Console.WriteLine(($"R$ {pedido.ObterTotal()}".PadRight(20, ' ')).PadLeft(100, ' '));
 
-      Console.WriteLine("\nPressione Enter...");
+      Console.Write("\nPressione Enter...");
       Console.ReadKey();
     }
 
@@ -387,7 +383,7 @@ namespace sgp.Services
           Console.WriteLine("".PadRight(100, '-'));
         }
       }
-      Console.WriteLine("\nPressione Enter...");
+      Console.Write("\nPressione Enter...");
       Console.ReadKey();
     }
     static void Save()

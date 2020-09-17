@@ -15,10 +15,9 @@ namespace sgp.Models
     private void Titulo(string titulo)
     {
       titulo = "".PadRight((100 - titulo.Length) / 2, ' ') + titulo.ToUpper();
-      Console.WriteLine("".PadRight(100, '#'));
+      Console.WriteLine("".PadRight(100, ' '));
       Console.WriteLine(titulo);
-      Console.WriteLine("".PadRight(100, '#'));
-      Console.WriteLine();
+      Console.WriteLine("".PadRight(100, ' '));
     }
     public int Build(int parent = 0)
     {
@@ -51,7 +50,7 @@ namespace sgp.Models
 
       if (parent != 0)
       {
-        Console.WriteLine("\n 0. Voltar para o início");
+        Console.WriteLine("\n0. Voltar para o início");
       }
       Console.Write("\n > Digite o número correspondente: ");
       try
