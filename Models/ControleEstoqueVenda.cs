@@ -31,6 +31,18 @@ namespace sgp.Models
       return Lojas.Count != 0;
     }
 
+    public bool ExistemPedidos()
+    {
+      foreach (var loja in Lojas)
+      {
+        if (loja.hasOrder())
+        {
+          return true;
+        }
+      }
+      return false;
+    }
+
     public List<Loja> GetLojas()
     {
       return Lojas;
@@ -42,10 +54,33 @@ namespace sgp.Models
       try
       {
         lastId = ListarProdutos().Select(x => x.Codigo).Max();
-
       }
       catch { }
       return ++lastId;
+    }
+
+    public int nextIdPedido()
+    {
+      int lastId = 0;
+      try
+      {
+        lastId = ListarPedidos().Select(x => x.Codigo).Max();
+      }
+      catch { }
+      return ++lastId;
+    }
+
+    public List<Pedido> ListarPedidos()
+    {
+      List<Pedido> lista = new List<Pedido>();
+      foreach (var loja in Lojas)
+      {
+        foreach (var pedido in loja.Pedidos)
+        {
+          lista.Add(pedido);
+        }
+      }
+      return lista;
     }
 
     public List<Produto> ListarProdutos()
@@ -62,5 +97,17 @@ namespace sgp.Models
       return lista;
     }
 
+    public Estoque BuscarEstoque(int codigoProduto)
+    {
+      Estoque estoque = null;
+      foreach (var loja in Lojas)
+      {
+        if (loja.Estoques.Exists(x => x.Produto.Codigo == codigoProduto))
+        {
+          estoque = loja.Estoques.Find(x => x.Produto.Codigo == codigoProduto);
+        }
+      }
+      return estoque;
+    }
   }
 }

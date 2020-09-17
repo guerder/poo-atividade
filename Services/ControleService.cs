@@ -84,6 +84,7 @@ namespace sgp.Services
       if (_controle.GetLojas().Count == 0)
       {
         Console.WriteLine("Não existem lojas cadastradas!");
+        Console.Write("\nPressione Enter...");
         Console.ReadKey();
         return;
       }
@@ -100,20 +101,18 @@ namespace sgp.Services
     {
       if (_controle.GetLojas().Count == 0)
       {
-        Console.WriteLine("");
         Console.WriteLine("Não existe loja cadastrada!");
+        Console.Write("\nPressione Enter...");
         Console.ReadKey();
         return null;
       }
 
-      Console.WriteLine("");
-      Console.WriteLine("".PadRight(100, '-'));
       for (int i = 0; i < _controle.GetLojas().Count; i++)
       {
         Console.WriteLine($"{i + 1}. {_controle.GetLojas()[i].Nome}");
       }
 
-      Console.Write("\n > Digite o número da Loja para atualizar o estoque: ");
+      Console.Write("\n > Digite o número da Loja: ");
       int option;
       try
       {
@@ -152,6 +151,7 @@ namespace sgp.Services
       if (_controle.ListarProdutos().Count == 0)
       {
         Console.WriteLine("Não existem produtos cadastrados!");
+        Console.Write("\nPressione Enter...");
         Console.ReadKey();
         return;
       }
@@ -189,12 +189,11 @@ namespace sgp.Services
         Console.ReadKey();
         return null;
       }
-      Console.WriteLine("");
       Console.WriteLine("".PadRight(100, '_'));
       Console.WriteLine(
-          "CÓDIGO".PadRight(20, ' ') +
-          "PRODUTO".PadRight(20, ' ') +
-          "VALOR".PadRight(20, ' ')
+          "CÓDIGO".PadRight(33, ' ') +
+          "PRODUTO".PadRight(33, ' ') +
+          "VALOR".PadRight(33, ' ')
         );
       foreach (var prod in _controle.ListarProdutos())
       {
@@ -226,6 +225,7 @@ namespace sgp.Services
       {
         Console.WriteLine("");
         Console.WriteLine("Loja não selecionada");
+        Console.Write("\nPressione Enter...");
         Console.ReadKey();
         return;
       }
@@ -246,48 +246,64 @@ namespace sgp.Services
       }
       catch { }
 
-      Pedido pedido = new Pedido(nomeCliente, nomeVendedor);
+      int nextId = _controle.nextIdPedido();
+      Pedido pedido = new Pedido(nextId, nomeCliente, nomeVendedor);
 
       Produto produto;
       int quantidade;
       double desconto;
       string novoItem = "";
-      ItemPedido item;
+      ItemPedido itemPedido;
       do
       {
+
         produto = SelecionarProduto();
         if (produto == null)
         {
+          Console.WriteLine("");
           Console.WriteLine("Produto inválido!");
+          Console.Write("\nPressione Enter...");
+          Console.ReadKey();
+          return;
+        }
+        int quantidadeEmEstoque = _controle.BuscarEstoque(produto.Codigo).Quantidade;
+        string msg = quantidadeEmEstoque == 1 ? $"Existe apenas {quantidadeEmEstoque} unidade " : $"Existem {quantidadeEmEstoque} unidades ";
+        Console.WriteLine($"\n > {msg}do produto informado.");
+
+        Console.Write("\n > Digite a quantidade desejada: ");
+        try
+        {
+          quantidade = int.Parse(Console.ReadLine());
+        }
+        catch { quantidade = 1; }
+
+        if (quantidade > quantidadeEmEstoque)
+        {
+          Console.WriteLine("");
+          Console.WriteLine($"Quantidade informada '{quantidade}' excede o estoque de '{quantidadeEmEstoque}' unidade (s).");
+          Console.Write("\nPressione Enter...");
+          Console.ReadKey();
+          return;
+        }
+
+        Console.Write("\n > Aplicar desconto para este produto? (S/N): ");
+        if (Console.ReadLine().ToUpper() == "S")
+        {
+          Console.Write("\n > Digite a porcentagem de desconto (ex. 15): ");
+          try
+          {
+            desconto = double.Parse(Console.ReadLine());
+          }
+          catch { desconto = 0; }
+
+          itemPedido = new ItemPedido(produto, quantidade, desconto);
         }
         else
         {
-          Console.Write("\n > Digite a quantidade desejada: ");
-          try
-          {
-            quantidade = int.Parse(Console.ReadLine());
-          }
-          catch { quantidade = 1; }
-
-          Console.Write("\n > Aplicar desconto para este produto? (S/N): ");
-          if (Console.ReadLine().ToUpper() == "S")
-          {
-            Console.Write("\n > Digite a porcentagem de desconto (ex. 15): ");
-            try
-            {
-              desconto = double.Parse(Console.ReadLine());
-            }
-            catch { desconto = 0; }
-
-            item = new ItemPedido(produto, quantidade, desconto);
-          }
-          else
-          {
-            item = new ItemPedido(produto, quantidade);
-          }
-
-          pedido.AdicionarItem(item);
+          itemPedido = new ItemPedido(produto, quantidade);
         }
+
+        pedido.AdicionarItem(itemPedido);
 
         Console.Write("\n > Deseja adicionar outro produto ao pedido? (S/N): ");
         novoItem = Console.ReadLine().ToUpper();
@@ -305,6 +321,11 @@ namespace sgp.Services
 
       if (confirmarPedido == "S")
       {
+        foreach (var item in pedido.Itens)
+        {
+          var estoque = _controle.BuscarEstoque(item.Produto.Codigo);
+          estoque.Quantidade -= item.Quantidade;
+        }
         pedido.ConfirmarPedido();
         pedido.Loja = loja;
         loja.Pedidos.Add(pedido);
@@ -318,25 +339,24 @@ namespace sgp.Services
       Console.WriteLine("");
       Console.WriteLine("".PadRight(100, '_'));
       Console.WriteLine(
-          "Data:".PadRight(33, '.') + pedido.Data.ToString("dd/MM/yyyy HH:mm") + " " +
-          "Cliente:".PadRight(50 - pedido.NomeCliente.Length, '.') + pedido.NomeCliente
+          "Data:".PadRight(33, ' ') + pedido.Data.ToString("dd/MM/yyyy HH:mm") + "|" +
+          "Cliente:".PadRight(50 - pedido.NomeCliente.Length, ' ') + pedido.NomeCliente
         );
       Console.WriteLine(
-          "Status:".PadRight(49 - pedido.Status.ToString().Length, '.') + pedido.Status + " " +
-          "Vendedor:".PadRight(50 - pedido.NomeVendedor.Length, '.') + pedido.NomeVendedor
-        );
-
-      Console.WriteLine("".PadRight(100, '_'));
-      Console.WriteLine(
-          "CÓDIGO".PadRight(9, '.') + " " +
-          "PRODUTO".PadRight(29, '.') + " " +
-          "VALOR UNIT".PadRight(19, '.') + " " +
-          "QUANT".PadRight(9, '.') + " " +
-          "DESC (%)".PadRight(9, '.') + " " +
-          "VALOR TOTAL".PadRight(20, '.')
+          "Status:".PadRight(49 - pedido.Status.ToString().Length, ' ') + pedido.Status + "|" +
+          "Vendedor:".PadRight(50 - pedido.NomeVendedor.Length, ' ') + pedido.NomeVendedor
         );
 
       Console.WriteLine("".PadRight(100, '-'));
+      Console.WriteLine(
+          "CÓDIGO".PadRight(9, ' ') + " " +
+          "PRODUTO".PadRight(29, ' ') + " " +
+          "VALOR UNIT".PadRight(19, ' ') + " " +
+          "QUANT".PadRight(9, ' ') + " " +
+          "DESC (%)".PadRight(9, ' ') + " " +
+          "VALOR TOTAL".PadRight(20, ' ')
+        );
+
       foreach (var item in pedido.Itens)
       {
         Console.WriteLine(
@@ -347,7 +367,6 @@ namespace sgp.Services
           $"{item.Desconto}%".PadRight(9, '.') + " " +
           $"R$ {item.ObterTotalItem()}".PadRight(20, '.')
         );
-        Console.WriteLine("".PadRight(100, '-'));
       }
       Console.WriteLine(($"R$ {pedido.ObterTotal()}".PadRight(20, ' ')).PadLeft(100, ' '));
 
@@ -357,31 +376,35 @@ namespace sgp.Services
 
     public void ExibirPedidos()
     {
+      if (!_controle.ExistemPedidos())
+      {
+        Console.WriteLine("Não existem pedidos cadastrados!");
+        Console.Write("\nPressione Enter...");
+        Console.ReadKey();
+        return;
+      }
       Console.WriteLine("".PadRight(100, '_'));
       Console.WriteLine(
-          "DATA".PadRight(19, ' ') + " " +
+          "COD.".PadRight(4, ' ') + " " +
+          "DATA".PadRight(16, ' ') + " " +
           "CLIENTE".PadRight(24, ' ') + " " +
-          "ITENS".PadRight(9, ' ') + " " +
+          "ITENS".PadRight(7, ' ') + " " +
           "LOJA".PadRight(19, ' ') + " " +
           "STATUS".PadRight(14, ' ') + " " +
           "TOTAL".PadRight(10, ' ')
         );
 
-      Console.WriteLine("".PadRight(100, '-'));
-      foreach (var loja in _controle.Lojas)
+      foreach (var pedido in _controle.ListarPedidos())
       {
-        foreach (var pedido in loja.Pedidos)
-        {
-          Console.WriteLine(
-            $"{pedido.Data.ToString("dd/MM/yyyy HH:mm")}".PadRight(19, '.') + " " +
-            $"{pedido.NomeCliente}".PadRight(24, '.') + " " +
-            $"{pedido.Itens.Count}".PadRight(9, '.') + " " +
-            $"{pedido.Loja.Nome}".PadRight(19, '.') + " " +
-            $"{pedido.Status}".PadRight(14, '.') + " " +
-            $"R$ {pedido.ObterTotal()}".PadRight(10, '.')
-          );
-          Console.WriteLine("".PadRight(100, '-'));
-        }
+        Console.WriteLine(
+          $"{pedido.Codigo}".PadLeft(4, '0') + " " +
+          $"{pedido.Data.ToString("dd/MM/yyyy HH:mm")}".PadRight(16, '.') + " " +
+          $"{pedido.NomeCliente}".PadRight(24, '.') + " " +
+          $"{pedido.Itens.Count}".PadRight(7, '.') + " " +
+          $"{pedido.Loja.Nome}".PadRight(19, '.') + " " +
+          $"{pedido.Status}".PadRight(14, '.') + " " +
+          $"R$ {pedido.ObterTotal()}".PadRight(10, '.')
+        );
       }
       Console.Write("\nPressione Enter...");
       Console.ReadKey();

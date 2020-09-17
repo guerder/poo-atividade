@@ -55,6 +55,7 @@ namespace sgp
 
           default:
             Console.WriteLine("\n Opção não implementada.");
+            Console.Write("\nPressione Enter...");
             Console.ReadKey();
             break;
         }

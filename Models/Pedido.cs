@@ -8,6 +8,7 @@ namespace sgp.Models
   [Serializable]
   public class Pedido
   {
+    public int Codigo { get; }
     public DateTime Data { get; set; }
     public string NomeCliente { get; set; }
     public string NomeVendedor { get; set; }
@@ -15,8 +16,9 @@ namespace sgp.Models
     public Loja Loja { get; set; }
     public Status Status { get; set; }
 
-    public Pedido(string nomeCliente, string nomeVendedor)
+    public Pedido(int codigo, string nomeCliente, string nomeVendedor)
     {
+      this.Codigo = codigo;
       this.Data = DateTime.Now;
       this.NomeCliente = nomeCliente;
       this.NomeVendedor = nomeVendedor;
