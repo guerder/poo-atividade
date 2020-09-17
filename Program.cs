@@ -22,6 +22,7 @@ namespace sgp
         new Menu(8, "Excluir Produto", 2),
         new Menu(9, "Realizar Pedido", 3),
         new Menu(10, "Despachar Pedido", 3),
+        new Menu(11, "Listar Pedidos", 3),
       };
 
       BuilderMenu builder = new BuilderMenu(menus);
@@ -42,6 +43,12 @@ namespace sgp
             break;
           case 7:
             controleService.ExibirProdutos();
+            break;
+          case 9:
+            controleService.RealizarPedido();
+            break;
+          case 11:
+            controleService.ExibirPedidos();
             break;
 
           default:

@@ -11,7 +11,7 @@ namespace sgp.Models
     public DateTime Data { get; set; }
     public string NomeCliente { get; set; }
     public string NomeVendedor { get; set; }
-    private List<ItemPedido> Itens { get; set; }
+    public List<ItemPedido> Itens { get; }
     public Loja Loja { get; set; }
     public Status Status { get; set; }
 

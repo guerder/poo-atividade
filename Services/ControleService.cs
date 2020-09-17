@@ -293,14 +293,75 @@ namespace sgp.Services
           pedido.AdicionarItem(item);
         }
 
-        Console.Write(
-          "Deseja adicionar outro produto ao pedido? \n" +
-          "Digite 'S' para sim, ou 'N' para não: "
-        );
+        Console.Write("Deseja adicionar outro produto ao pedido? (S/N): ");
         continuar = Console.ReadLine().ToUpper();
       } while (continuar == "S");
+
+      ExibirDetalhesPedido(pedido);
+
+      Console.WriteLine("Confirma o pedido? S/N");
+      string confirmarPedido = "";
+      try
+      {
+        confirmarPedido = Console.ReadLine().ToUpper();
+      }
+      catch { }
+
+      if (confirmarPedido == "S")
+      {
+        pedido.ConfirmarPedido();
+        loja.Pedidos.Add(pedido);
+        Save();
+      }
     }
 
+    private void ExibirDetalhesPedido(Pedido pedido)
+    {
+      Console.WriteLine("");
+      Console.WriteLine("".PadRight(100, '_'));
+      Console.WriteLine(
+          "Data:".PadRight(33, '.') + pedido.Data.ToString("dd/MM/yyyy HH:mm") + " " +
+          "Cliente:".PadRight(50 - pedido.NomeCliente.Length, '.') + pedido.NomeCliente
+        );
+      Console.WriteLine(
+          "Status:".PadRight(49 - pedido.Status.ToString().Length, '.') + pedido.Status + " " +
+          "Vendedor:".PadRight(50 - pedido.NomeVendedor.Length, '.') + pedido.NomeVendedor
+        );
+
+      Console.WriteLine("".PadRight(100, '_'));
+      Console.WriteLine(
+          "CÓDIGO".PadRight(9, '.') + " " +
+          "PRODUTO".PadRight(29, '.') + " " +
+          "VALOR UNIT".PadRight(19, '.') + " " +
+          "QUANT".PadRight(9, '.') + " " +
+          "DESC (%)".PadRight(9, '.') + " " +
+          "VALOR TOTAL".PadRight(20, '.')
+        );
+
+      Console.WriteLine("".PadRight(100, '-'));
+      foreach (var item in pedido.Itens)
+      {
+        Console.WriteLine(
+          $"{item.Produto.Codigo}".PadLeft(9, '0') + " " +
+          $"{item.Produto.Nome}".PadRight(29, '.') + " " +
+          $"R$ {item.Produto.Preco}".PadRight(19, '.') + " " +
+          $"{item.Quantidade}".PadRight(9, '.') + " " +
+          $"{item.Desconto}%".PadRight(9, '.') + " " +
+          $"R$ {item.ObterTotalItem()}".PadRight(20, '.')
+        );
+        Console.WriteLine("".PadRight(100, '-'));
+      }
+      Console.WriteLine(($"R$ {pedido.ObterTotal()}".PadRight(20, ' ')).PadLeft(100, ' '));
+
+      Console.WriteLine("\nPressione Enter...");
+      Console.ReadKey();
+    }
+
+    // TODO - Falta implementar
+    public void ExibirPedidos()
+    {
+      Console.WriteLine("".PadRight(100, '-'));
+    }
     static void Save()
     {
       try
