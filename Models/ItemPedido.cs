@@ -19,7 +19,7 @@ namespace sgp.Models
     public double ObterTotalItem()
     {
       var total = (Quantidade * Produto.Preco) * ((100 - Desconto) / 100);
-      return total;
+      return Math.Round(total, 2);
     }
   }
 }

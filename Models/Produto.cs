@@ -13,7 +13,7 @@ namespace sgp.Models
     {
       this.Codigo = codigo;
       this.Nome = nome;
-      this.Preco = preco;
+      this.Preco = Math.Round(preco, 2);
     }
   }
 }

@@ -170,7 +170,7 @@ namespace sgp.Services
           Console.WriteLine(
               $"{estoque.Produto.Codigo}".PadRight(19, '.') + " " +
               $"{estoque.Produto.Nome}".PadRight(29, '.') + " " +
-              $"R$ {estoque.Produto.Preco}".PadRight(19, '.') + " " +
+              $"{estoque.Produto.Preco.ToString("C")}".PadRight(19, '.') + " " +
               $"{estoque.Quantidade}".PadRight(9, '.') + " " +
               $"{loja.Nome}".PadRight(20, '.')
             );
@@ -354,7 +354,7 @@ namespace sgp.Services
           "VALOR UNIT".PadRight(19, ' ') + " " +
           "QUANT".PadRight(9, ' ') + " " +
           "DESC (%)".PadRight(9, ' ') + " " +
-          "VALOR TOTAL".PadRight(20, ' ')
+          "SUB-TOTAL".PadRight(20, ' ')
         );
 
       foreach (var item in pedido.Itens)
@@ -365,10 +365,11 @@ namespace sgp.Services
           $"R$ {item.Produto.Preco}".PadRight(19, '.') + " " +
           $"{item.Quantidade}".PadRight(9, '.') + " " +
           $"{item.Desconto}%".PadRight(9, '.') + " " +
-          $"R$ {item.ObterTotalItem()}".PadRight(20, '.')
+          $"{item.ObterTotalItem().ToString("C")}".PadRight(20, '.')
         );
       }
-      Console.WriteLine(($"R$ {pedido.ObterTotal()}".PadRight(20, ' ')).PadLeft(100, ' '));
+      Console.WriteLine("");
+      Console.WriteLine("TOTAL".PadRight(79, '.') + " " + $"{pedido.ObterTotal().ToString("C")}".PadRight(20, '.'));
 
       Console.Write("\nPressione Enter...");
       Console.ReadKey();
@@ -390,8 +391,8 @@ namespace sgp.Services
           "CLIENTE".PadRight(24, ' ') + " " +
           "ITENS".PadRight(7, ' ') + " " +
           "LOJA".PadRight(19, ' ') + " " +
-          "STATUS".PadRight(14, ' ') + " " +
-          "TOTAL".PadRight(10, ' ')
+          "STATUS".PadRight(10, ' ') + " " +
+          "TOTAL".PadRight(14, ' ')
         );
 
       foreach (var pedido in _controle.ListarPedidos())
@@ -402,8 +403,8 @@ namespace sgp.Services
           $"{pedido.NomeCliente}".PadRight(24, '.') + " " +
           $"{pedido.Itens.Count}".PadRight(7, '.') + " " +
           $"{pedido.Loja.Nome}".PadRight(19, '.') + " " +
-          $"{pedido.Status}".PadRight(14, '.') + " " +
-          $"R$ {pedido.ObterTotal()}".PadRight(10, '.')
+          $"{pedido.Status}".PadRight(10, '.') + " " +
+          $"{pedido.ObterTotal().ToString("C")}".PadRight(14, '.')
         );
       }
       Console.Write("\nPressione Enter...");
