@@ -161,10 +161,10 @@ namespace sgp.Services
       Console.WriteLine("");
       Console.WriteLine("".PadRight(100, '_'));
       Console.WriteLine(
-          "CÓDIGO".PadRight(20, ' ') +
-          "PRODUTO".PadRight(20, ' ') +
-          "VALOR".PadRight(20, ' ') +
-          "QUANTIDADE".PadRight(20, ' ') +
+          "CÓDIGO".PadRight(19, ' ') + " " +
+          "PRODUTO".PadRight(29, ' ') + " " +
+          "VALOR".PadRight(19, ' ') + " " +
+          "QUANT.".PadRight(9, ' ') + " " +
           "LOJA".PadRight(20, ' ')
         );
       foreach (var loja in _controle.GetLojas())
@@ -172,10 +172,10 @@ namespace sgp.Services
         foreach (var estoque in loja.Estoques)
         {
           Console.WriteLine(
-              $"{estoque.Produto.Codigo}".PadRight(20, '.') +
-              $"{estoque.Produto.Nome}".PadRight(20, '.') +
-              $"R$ {estoque.Produto.Preco}".PadRight(20, '.') +
-              $"{estoque.Quantidade}".PadRight(20, '.') +
+              $"{estoque.Produto.Codigo}".PadRight(19, '.') + " " +
+              $"{estoque.Produto.Nome}".PadRight(29, '.') + " " +
+              $"R$ {estoque.Produto.Preco}".PadRight(19, '.') + " " +
+              $"{estoque.Quantidade}".PadRight(9, '.') + " " +
               $"{loja.Nome}".PadRight(20, '.')
             );
         }
@@ -359,17 +359,16 @@ namespace sgp.Services
       Console.ReadKey();
     }
 
-    // TODO - Falta implementar
     public void ExibirPedidos()
     {
       Console.WriteLine("".PadRight(100, '_'));
       Console.WriteLine(
-          "DATA".PadRight(19, '.') + " " +
-          "CLIENTE".PadRight(24, '.') + " " +
-          "ITENS".PadRight(9, '.') + " " +
-          "LOJA".PadRight(19, '.') + " " +
-          "STATUS".PadRight(14, '.') + " " +
-          "TOTAL".PadRight(10, '.')
+          "DATA".PadRight(19, ' ') + " " +
+          "CLIENTE".PadRight(24, ' ') + " " +
+          "ITENS".PadRight(9, ' ') + " " +
+          "LOJA".PadRight(19, ' ') + " " +
+          "STATUS".PadRight(14, ' ') + " " +
+          "TOTAL".PadRight(10, ' ')
         );
 
       Console.WriteLine("".PadRight(100, '-'));

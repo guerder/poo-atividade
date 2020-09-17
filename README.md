@@ -7,10 +7,10 @@
 
 ### Agora a loja cresceu, e tem várias unidades na cidade.
 
-- [ ] Modifique o programa para utilizar as várias lojas e seus estoques,
-       de forma que se um produto não está em uma loja, pode estar em
-       outra.
+- [x] Modifique o programa para utilizar as várias lojas e seus estoques,
+      de forma que se um produto não está em uma loja, pode estar em
+      outra.
 
 ### Desafio:
 
-- [ ] Como salvar estes dados?
+- [x] Como salvar estes dados?

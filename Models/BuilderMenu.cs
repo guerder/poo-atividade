@@ -86,6 +86,8 @@ namespace sgp.Models
         }
       }
 
+      Console.Clear();
+      Titulo(Menus.Find(x => x.Id == idReturn).Name);
       return idReturn;
     }
   }
