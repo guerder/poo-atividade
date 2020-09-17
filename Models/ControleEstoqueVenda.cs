@@ -7,8 +7,8 @@ namespace sgp.Models
   [Serializable]
   public class ControleEstoqueVenda
   {
-    private List<Loja> Lojas { get; set; }
-    private List<SetorEntrega> SetorEntregas { get; set; }
+    public List<Loja> Lojas { get; }
+    public List<SetorEntrega> SetorEntregas { get; }
 
     public ControleEstoqueVenda()
     {

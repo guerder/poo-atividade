@@ -235,7 +235,7 @@ namespace sgp.Services
       }
 
       string nomeCliente = "";
-      Console.Write("Digite o nome do 'cliente': ");
+      Console.Write("\n > Digite o nome do 'Cliente': ");
       try
       {
         nomeCliente = Console.ReadLine();
@@ -243,7 +243,7 @@ namespace sgp.Services
       catch { }
 
       string nomeVendedor = "";
-      Console.Write("Digite o nome do 'vendedor': ");
+      Console.Write("\n > Digite o nome do 'Vendedor': ");
       try
       {
         nomeVendedor = Console.ReadLine();
@@ -255,7 +255,7 @@ namespace sgp.Services
       Produto produto;
       int quantidade;
       double desconto;
-      string continuar = "";
+      string novoItem = "";
       ItemPedido item;
       do
       {
@@ -266,17 +266,17 @@ namespace sgp.Services
         }
         else
         {
-          Console.Write("Digite a quantidade desejada: ");
+          Console.Write("\n > Digite a quantidade desejada: ");
           try
           {
             quantidade = int.Parse(Console.ReadLine());
           }
           catch { quantidade = 1; }
 
-          Console.Write("Aplicar desconto para este produto? (S/N): ");
+          Console.Write("\n > Aplicar desconto para este produto? (S/N): ");
           if (Console.ReadLine().ToUpper() == "S")
           {
-            Console.Write("Digite a porcentagem de desconto (ex. 15): ");
+            Console.Write("\n > Digite a porcentagem de desconto (ex. 15): ");
             try
             {
               desconto = double.Parse(Console.ReadLine());
@@ -293,13 +293,13 @@ namespace sgp.Services
           pedido.AdicionarItem(item);
         }
 
-        Console.Write("Deseja adicionar outro produto ao pedido? (S/N): ");
-        continuar = Console.ReadLine().ToUpper();
-      } while (continuar == "S");
+        Console.Write("\n > Deseja adicionar outro produto ao pedido? (S/N): ");
+        novoItem = Console.ReadLine().ToUpper();
+      } while (novoItem == "S");
 
       ExibirDetalhesPedido(pedido);
 
-      Console.WriteLine("Confirma o pedido? S/N");
+      Console.Write("\n > Confirma o pedido? (S/N): ");
       string confirmarPedido = "";
       try
       {
@@ -310,6 +310,7 @@ namespace sgp.Services
       if (confirmarPedido == "S")
       {
         pedido.ConfirmarPedido();
+        pedido.Loja = loja;
         loja.Pedidos.Add(pedido);
         Save();
       }
@@ -317,6 +318,7 @@ namespace sgp.Services
 
     private void ExibirDetalhesPedido(Pedido pedido)
     {
+      Console.Clear();
       Console.WriteLine("");
       Console.WriteLine("".PadRight(100, '_'));
       Console.WriteLine(
@@ -360,7 +362,34 @@ namespace sgp.Services
     // TODO - Falta implementar
     public void ExibirPedidos()
     {
+      Console.WriteLine("".PadRight(100, '_'));
+      Console.WriteLine(
+          "DATA".PadRight(19, '.') + " " +
+          "CLIENTE".PadRight(24, '.') + " " +
+          "ITENS".PadRight(9, '.') + " " +
+          "LOJA".PadRight(19, '.') + " " +
+          "STATUS".PadRight(14, '.') + " " +
+          "TOTAL".PadRight(10, '.')
+        );
+
       Console.WriteLine("".PadRight(100, '-'));
+      foreach (var loja in _controle.Lojas)
+      {
+        foreach (var pedido in loja.Pedidos)
+        {
+          Console.WriteLine(
+            $"{pedido.Data.ToString("dd/MM/yyyy HH:mm")}".PadRight(19, '.') + " " +
+            $"{pedido.NomeCliente}".PadRight(24, '.') + " " +
+            $"{pedido.Itens.Count}".PadRight(9, '.') + " " +
+            $"{pedido.Loja.Nome}".PadRight(19, '.') + " " +
+            $"{pedido.Status}".PadRight(14, '.') + " " +
+            $"R$ {pedido.ObterTotal()}".PadRight(10, '.')
+          );
+          Console.WriteLine("".PadRight(100, '-'));
+        }
+      }
+      Console.WriteLine("\nPressione Enter...");
+      Console.ReadKey();
     }
     static void Save()
     {
