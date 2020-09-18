@@ -28,6 +28,26 @@ namespace sgp.Services
       catch { }
     }
 
+    private void Save()
+    {
+      try
+      {
+        // Cria um arquivo para salvar os dados
+        FileStream fs = new FileStream("data.bin", FileMode.Create);
+        // Cria um objeto BinaryFormatter para realizar a serialização
+        BinaryFormatter bf = new BinaryFormatter();
+        // Usa o objeto BinaryFormatter para serializar os dados para o arquivo
+        bf.Serialize(fs, _controle);
+        // fecha o arquivo
+        fs.Close();
+      }
+      catch (Exception e)
+      {
+        Console.WriteLine("erro na gravação dos dados: " + e);
+        Console.ReadKey();
+      }
+    }
+
     public void CadastrarProduto()
     {
       if (!_controle.ExisteLoja())
@@ -76,73 +96,6 @@ namespace sgp.Services
       int nextId = _controle.nextIdProduto();
       Produto produto = new Produto(nextId, description, value);
       loja.Estoques.Add(new Estoque(produto, qtd));
-      Save();
-    }
-
-    public void ExibirLojas()
-    {
-      if (_controle.GetLojas().Count == 0)
-      {
-        Console.WriteLine("Não existem lojas cadastradas!");
-        Console.Write("\nPressione Enter...");
-        Console.ReadKey();
-        return;
-      }
-
-      for (int i = 0; i < _controle.GetLojas().Count; i++)
-      {
-        Console.WriteLine($"{i + 1}. {_controle.GetLojas()[i].Nome}");
-      }
-      Console.Write("\nPressione Enter...");
-      Console.ReadKey();
-    }
-
-    public Loja SelecionarLoja()
-    {
-      if (_controle.GetLojas().Count == 0)
-      {
-        Console.WriteLine("Não existe loja cadastrada!");
-        Console.Write("\nPressione Enter...");
-        Console.ReadKey();
-        return null;
-      }
-
-      for (int i = 0; i < _controle.GetLojas().Count; i++)
-      {
-        Console.WriteLine($"{i + 1}. {_controle.GetLojas()[i].Nome}");
-      }
-
-      Console.Write("\n > Digite o número da Loja: ");
-      int option;
-      try
-      {
-        option = int.Parse(Console.ReadLine());
-      }
-      catch
-      {
-        option = 0;
-      }
-
-      int index = option - 1;
-      if (index >= 0 && index < _controle.GetLojas().Count)
-      {
-        return _controle.GetLojas()[index];
-      }
-      return null;
-    }
-
-    public void CadastrarLoja()
-    {
-      string nome = "";
-      Console.Write("\n > Digite o nome da Loja: ");
-      try
-      {
-        nome = Console.ReadLine();
-      }
-      catch { }
-
-      Loja loja = new Loja(nome);
-      _controle.AdicionarLoja(loja);
       Save();
     }
 
@@ -216,6 +169,73 @@ namespace sgp.Services
       }
       Produto produto = _controle.ListarProdutos().FirstOrDefault(x => x.Codigo == codigo);
       return produto;
+    }
+
+    public void ExibirLojas()
+    {
+      if (_controle.GetLojas().Count == 0)
+      {
+        Console.WriteLine("Não existem lojas cadastradas!");
+        Console.Write("\nPressione Enter...");
+        Console.ReadKey();
+        return;
+      }
+
+      for (int i = 0; i < _controle.GetLojas().Count; i++)
+      {
+        Console.WriteLine($"{i + 1}. {_controle.GetLojas()[i].Nome}");
+      }
+      Console.Write("\nPressione Enter...");
+      Console.ReadKey();
+    }
+
+    public Loja SelecionarLoja()
+    {
+      if (_controle.GetLojas().Count == 0)
+      {
+        Console.WriteLine("Não existe loja cadastrada!");
+        Console.Write("\nPressione Enter...");
+        Console.ReadKey();
+        return null;
+      }
+
+      for (int i = 0; i < _controle.GetLojas().Count; i++)
+      {
+        Console.WriteLine($"{i + 1}. {_controle.GetLojas()[i].Nome}");
+      }
+
+      Console.Write("\n > Digite o número da Loja: ");
+      int option;
+      try
+      {
+        option = int.Parse(Console.ReadLine());
+      }
+      catch
+      {
+        option = 0;
+      }
+
+      int index = option - 1;
+      if (index >= 0 && index < _controle.GetLojas().Count)
+      {
+        return _controle.GetLojas()[index];
+      }
+      return null;
+    }
+
+    public void CadastrarLoja()
+    {
+      string nome = "";
+      Console.Write("\n > Digite o nome da Loja: ");
+      try
+      {
+        nome = Console.ReadLine();
+      }
+      catch { }
+
+      Loja loja = new Loja(nome);
+      _controle.AdicionarLoja(loja);
+      Save();
     }
 
     public void RealizarPedido()
@@ -333,6 +353,40 @@ namespace sgp.Services
       }
     }
 
+    public void VisualizarPedido()
+    {
+      var pedido = BuscarPedido();
+
+      if (pedido == null)
+      {
+        Console.WriteLine("");
+        Console.WriteLine("Pedido não localizado");
+        Console.Write("\nPressione Enter...");
+        Console.ReadKey();
+        return;
+      }
+
+      ExibirDetalhesPedido(pedido);
+    }
+
+    private Pedido BuscarPedido()
+    {
+
+      int codigoPedido;
+      Console.Write("\n > Digite o Código do pedido: ");
+      try
+      {
+        codigoPedido = int.Parse(Console.ReadLine());
+      }
+      catch
+      {
+        codigoPedido = 0;
+      }
+
+      Pedido pedido = _controle.ListarPedidos().FirstOrDefault(x => x.Codigo == codigoPedido);
+      return pedido;
+    }
+
     private void ExibirDetalhesPedido(Pedido pedido)
     {
       Console.Clear();
@@ -409,25 +463,6 @@ namespace sgp.Services
       }
       Console.Write("\nPressione Enter...");
       Console.ReadKey();
-    }
-    static void Save()
-    {
-      try
-      {
-        // Cria um arquivo para salvar os dados
-        FileStream fs = new FileStream("data.bin", FileMode.Create);
-        // Cria um objeto BinaryFormatter para realizar a serialização
-        BinaryFormatter bf = new BinaryFormatter();
-        // Usa o objeto BinaryFormatter para serializar os dados para o arquivo
-        bf.Serialize(fs, _controle);
-        // fecha o arquivo
-        fs.Close();
-      }
-      catch (Exception e)
-      {
-        Console.WriteLine("erro na gravação dos dados: " + e);
-        Console.ReadKey();
-      }
     }
   }
 }
