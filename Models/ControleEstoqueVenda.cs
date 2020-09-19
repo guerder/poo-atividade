@@ -33,14 +33,7 @@ namespace sgp.Models
 
     public bool ExistemPedidos()
     {
-      foreach (var loja in Lojas)
-      {
-        if (loja.Pedidos.Count != 0)
-        {
-          return true;
-        }
-      }
-      return false;
+      return Lojas.Any(Loja => Loja.Pedidos.Count != 0);
     }
 
     public bool ExistemEntregas()
