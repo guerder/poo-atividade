@@ -565,7 +565,7 @@ namespace sgp.Services
 
     public void ConfirmarEntrega()
     {
-      var entrega = BuscarPedido();
+      var entrega = BuscarEntrega();
 
       if (entrega == null)
       {
