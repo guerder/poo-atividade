@@ -3,6 +3,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using sgp.Models;
 using System.Linq;
+using sgp.Models.Enums;
 
 namespace sgp.Services
 {
@@ -367,6 +368,9 @@ namespace sgp.Services
       }
 
       ExibirDetalhesPedido(pedido);
+
+      Console.Write("\nPressione Enter...");
+      Console.ReadKey();
     }
 
     private Pedido BuscarPedido()
@@ -425,8 +429,6 @@ namespace sgp.Services
       Console.WriteLine("");
       Console.WriteLine("TOTAL".PadRight(79, '.') + " " + $"{pedido.ObterTotal().ToString("C")}".PadRight(20, '.'));
 
-      Console.Write("\nPressione Enter...");
-      Console.ReadKey();
     }
 
     public void ExibirPedidos()
@@ -479,6 +481,15 @@ namespace sgp.Services
       }
 
       ExibirDetalhesPedido(pedido);
+
+      if (pedido.Status >= Status.Despachado)
+      {
+        Console.WriteLine("");
+        Console.WriteLine($"Pedido já consta como {pedido.Status}.");
+        Console.Write("\nPressione Enter...");
+        Console.ReadKey();
+        return;
+      }
 
       Console.Write("\n > Confirma o encaminhamento para o setor de entrega? (S/N): ");
       string confirmarPedido = "";
@@ -535,6 +546,68 @@ namespace sgp.Services
       }
       Console.Write("\nPressione Enter...");
       Console.ReadKey();
+    }
+
+    private Pedido BuscarEntrega()
+    {
+
+      int codigoPedido;
+      Console.Write("\n > Digite o Código do pedido: ");
+      try
+      {
+        codigoPedido = int.Parse(Console.ReadLine());
+      }
+      catch
+      {
+        codigoPedido = 0;
+      }
+
+      Pedido pedido = _controle.ListarEntregas().FirstOrDefault(x => x.Codigo == codigoPedido);
+      return pedido;
+    }
+
+    public void ConfirmarEntrega()
+    {
+      var entrega = BuscarPedido();
+
+      if (entrega == null)
+      {
+        Console.WriteLine("");
+        Console.WriteLine("Entrega não localizada");
+        Console.Write("\nPressione Enter...");
+        Console.ReadKey();
+        return;
+      }
+
+      ExibirDetalhesPedido(entrega);
+
+      if (entrega.Status == Status.Entregue)
+      {
+        Console.WriteLine("");
+        Console.WriteLine($"Pedido já consta como {entrega.Status}.");
+        Console.Write("\nPressione Enter...");
+        Console.ReadKey();
+        return;
+      }
+
+      Console.Write("\n > Confirma a entrega do pedido? (S/N): ");
+      string confirmarEntrega = "";
+      try
+      {
+        confirmarEntrega = Console.ReadLine().ToUpper();
+      }
+      catch { }
+
+      if (confirmarEntrega == "S")
+      {
+        entrega.FinalizarPedido();
+        Save();
+
+        Console.WriteLine("");
+        Console.WriteLine("Entrega realizada com sucesso!");
+        Console.Write("\nPressione Enter...");
+        Console.ReadKey();
+      }
     }
   }
 }

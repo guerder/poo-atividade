@@ -1,8 +1,8 @@
 ### Faça um programa de controle de estoque e venda de roupas:
 
-- [ ] Exibir os dados dos produtos
+- [x] Exibir os dados dos produtos
 - [ ] Resumo geral
-- [ ] Despachar para o setor de entregas
+- [x] Despachar para o setor de entregas
 - [ ] Resumo de vendas
 
 ### Agora a loja cresceu, e tem várias unidades na cidade.

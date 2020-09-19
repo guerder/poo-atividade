@@ -65,6 +65,9 @@ namespace sgp
           case 16:
             controleService.ExibirEntregas();
             break;
+          case 17:
+            controleService.ConfirmarEntrega();
+            break;
 
           default:
             Console.WriteLine("\n Opção não implementada.");
