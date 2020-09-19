@@ -55,6 +55,7 @@ namespace sgp.Services
       {
         Console.WriteLine("");
         Console.WriteLine("Não existe loja no sistema para cadastrar produto!");
+        Console.Write("\nPressione Enter...");
         Console.ReadKey();
         return;
       }
@@ -113,8 +114,6 @@ namespace sgp.Services
       if (_controle.ListarEstoques().Count == 0)
       {
         Console.WriteLine("Não existem produtos cadastrados!");
-        Console.Write("\nPressione Enter...");
-        Console.ReadKey();
         return;
       }
       Console.WriteLine("".PadRight(100, '_'));
@@ -618,6 +617,15 @@ namespace sgp.Services
       int despachado = _controle.ListarPedidos().Where(x => x.Status == Status.Despachado).Count();
       int entregue = _controle.ListarPedidos().Where(x => x.Status == Status.Entregue).Count();
 
+      var recebidoPercentagem = Math.Round(((double)recebido / numeroPedidos) * 100);
+      recebidoPercentagem = double.IsNaN(recebidoPercentagem) ? 0 : recebidoPercentagem;
+
+      var despachadoPercentagem = Math.Round(((double)despachado / numeroPedidos) * 100);
+      despachadoPercentagem = double.IsNaN(despachadoPercentagem) ? 0 : despachadoPercentagem;
+
+      var entreguePercentagem = Math.Round(((double)entregue / numeroPedidos) * 100);
+      entreguePercentagem = double.IsNaN(entreguePercentagem) ? 0 : entreguePercentagem;
+
       Console.WriteLine("".PadRight(30, ' ') + "".PadRight(40, '-') + "".PadRight(30, ' '));
 
       Console.WriteLine("".PadLeft(30, ' ') +
@@ -644,17 +652,17 @@ namespace sgp.Services
       Console.WriteLine("");
       Console.WriteLine("".PadLeft(30, ' ') +
         "RECEBIDO:".PadRight(20, '.') +
-        $"({Math.Round(((double)recebido / numeroPedidos) * 100)}%) {recebido}".PadLeft(20, '.')
+        $"({recebidoPercentagem}%) {recebido}".PadLeft(20, '.')
       );
 
       Console.WriteLine("".PadLeft(30, ' ') +
        "DESPACHADO:".PadRight(20, '.') +
-       $"({Math.Round(((double)despachado / numeroPedidos) * 100)}%) {despachado}".PadLeft(20, '.')
+       $"({despachadoPercentagem}%) {despachado}".PadLeft(20, '.')
       );
 
       Console.WriteLine("".PadLeft(30, ' ') +
        "ENTREGUE:".PadRight(20, '.') +
-       $"({Math.Round(((double)entregue / numeroPedidos) * 100)}%) {entregue}".PadLeft(20, '.')
+       $"({entreguePercentagem}%) {entregue}".PadLeft(20, '.')
       );
 
       Console.WriteLine("".PadRight(30, ' ') + "".PadRight(40, '-') + "".PadRight(30, ' '));
@@ -676,6 +684,9 @@ namespace sgp.Services
 
       int numeroPedidos = _controle.ListarPedidos().Count;
 
+      double ticketMedio = faturamento / numeroPedidos;
+      ticketMedio = double.IsNaN(ticketMedio) ? 0 : ticketMedio;
+
       Console.WriteLine("".PadRight(30, ' ') + "".PadRight(40, '-') + "".PadRight(30, ' '));
 
       Console.WriteLine("".PadLeft(30, ' ') +
@@ -695,7 +706,7 @@ namespace sgp.Services
 
       Console.WriteLine("".PadLeft(30, ' ') +
             $"Ticket Médio:".PadRight(20, ' ') +
-            $"{(faturamento / numeroPedidos).ToString("C")}".PadLeft(20, ' '));
+            $"{ticketMedio.ToString("C")}".PadLeft(20, ' '));
       Console.WriteLine("".PadRight(30, ' ') + "".PadRight(40, '-') + "".PadRight(30, ' '));
 
       Console.Write("\nPressione Enter...");
