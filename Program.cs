@@ -53,6 +53,9 @@ namespace sgp
           case 11:
             controleService.RealizarPedido();
             break;
+          case 12:
+            controleService.DespacharPedido();
+            break;
           case 13:
             controleService.VisualizarPedido();
             break;

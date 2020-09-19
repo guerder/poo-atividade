@@ -46,5 +46,10 @@ namespace sgp.Models
     {
       this.Status = Status.Recebido;
     }
+
+    public void DespacharPedido()
+    {
+      this.Status = Status.Despachado;
+    }
   }
 }

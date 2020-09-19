@@ -14,7 +14,6 @@ namespace sgp.Models
     {
       this.Pedido = pedido;
       this.DataDespacho = DateTime.Now;
-      this.Pedido.Status = Status.Despachado;
     }
 
     public void Entregar()

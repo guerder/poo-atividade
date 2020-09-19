@@ -464,5 +464,41 @@ namespace sgp.Services
       Console.Write("\nPressione Enter...");
       Console.ReadKey();
     }
+
+    public void DespacharPedido()
+    {
+      var pedido = BuscarPedido();
+
+      if (pedido == null)
+      {
+        Console.WriteLine("");
+        Console.WriteLine("Pedido não localizado");
+        Console.Write("\nPressione Enter...");
+        Console.ReadKey();
+        return;
+      }
+
+      ExibirDetalhesPedido(pedido);
+
+      Console.Write("\n > Confirma o encaminhamento para o setor de entrega? (S/N): ");
+      string confirmarPedido = "";
+      try
+      {
+        confirmarPedido = Console.ReadLine().ToUpper();
+      }
+      catch { }
+
+      if (confirmarPedido == "S")
+      {
+        pedido.DespacharPedido();
+        _controle.AdicionarNovaEntrega(new SetorEntrega(pedido));
+        Save();
+
+        Console.WriteLine("");
+        Console.WriteLine("Despacho realizado com sucesso!");
+        Console.Write("\nPressione Enter...");
+        Console.ReadKey();
+      }
+    }
   }
 }
