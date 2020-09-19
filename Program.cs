@@ -16,17 +16,17 @@ namespace sgp
         new Menu(2, "Produtos", 0),
         new Menu(3, "Pedidos", 0),
         new Menu(4, "Setor de Entregas", 0),
-        new Menu(5, "Resumo Geral", 0),
-        new Menu(6, "Cadastrar Loja", 1),
-        new Menu(7, "Lojas Cadastradas", 1),
-        new Menu(8, "Cadastrar Produto", 2),
-        new Menu(9, "Produtos Cadastrados", 2),
-        new Menu(10, "Excluir Produto", 2),
-        new Menu(11, "Realizar Pedido", 3),
-        new Menu(12, "Despachar Pedido", 3),
-        new Menu(13, "Buscar Pedido", 3),
-        new Menu(14, "Pedidos Realizados", 3),
-        new Menu(15, "Resumo de Vendas", 3),
+        new Menu(5, "Resumo de Vendas", 0),
+        new Menu(6, "Resumo Geral", 0),
+        new Menu(7, "Cadastrar Loja", 1),
+        new Menu(8, "Lojas Cadastradas", 1),
+        new Menu(9, "Cadastrar Produto", 2),
+        new Menu(10, "Produtos Cadastrados", 2),
+        new Menu(11, "Excluir Produto", 2),
+        new Menu(12, "Realizar Pedido", 3),
+        new Menu(13, "Despachar Pedido", 3),
+        new Menu(14, "Visualizar Pedido", 3),
+        new Menu(15, "Pedidos Realizados", 3),
         new Menu(16, "Listar Entregas", 4),
         new Menu(17, "Confirmar entrega", 4),
       };
@@ -38,28 +38,28 @@ namespace sgp
         var idMenu = builder.Build();
         switch (idMenu)
         {
-          case 6:
+          case 7:
             controleService.CadastrarLoja();
             break;
-          case 7:
+          case 8:
             controleService.ExibirLojas();
             break;
-          case 8:
+          case 9:
             controleService.CadastrarProduto();
             break;
-          case 9:
+          case 10:
             controleService.ExibirProdutos();
             break;
-          case 11:
+          case 12:
             controleService.RealizarPedido();
             break;
-          case 12:
+          case 13:
             controleService.DespacharPedido();
             break;
-          case 13:
+          case 14:
             controleService.VisualizarPedido();
             break;
-          case 14:
+          case 15:
             controleService.ExibirPedidos();
             break;
           case 16:
