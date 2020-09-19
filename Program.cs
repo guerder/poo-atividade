@@ -24,7 +24,7 @@ namespace sgp
         new Menu(10, "Excluir Produto", 2),
         new Menu(11, "Realizar Pedido", 3),
         new Menu(12, "Despachar Pedido", 3),
-        new Menu(13, "Visualizar um Pedido", 3),
+        new Menu(13, "Buscar Pedido", 3),
         new Menu(14, "Pedidos Realizados", 3),
         new Menu(15, "Resumo de Vendas", 3),
         new Menu(16, "Listar Entregas", 4),
@@ -61,6 +61,9 @@ namespace sgp
             break;
           case 14:
             controleService.ExibirPedidos();
+            break;
+          case 16:
+            controleService.ExibirEntregas();
             break;
 
           default:

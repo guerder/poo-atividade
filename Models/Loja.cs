@@ -16,10 +16,5 @@ namespace sgp.Models
       this.Estoques = new List<Estoque>();
       this.Pedidos = new List<Pedido>();
     }
-
-    public bool hasOrder()
-    {
-      return this.Pedidos.Count != 0;
-    }
   }
 }

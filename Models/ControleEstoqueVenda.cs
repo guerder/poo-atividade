@@ -35,12 +35,17 @@ namespace sgp.Models
     {
       foreach (var loja in Lojas)
       {
-        if (loja.hasOrder())
+        if (loja.Pedidos.Count != 0)
         {
           return true;
         }
       }
       return false;
+    }
+
+    public bool ExistemEntregas()
+    {
+      return SetorEntregas.Count != 0;
     }
 
     public List<Loja> GetLojas()
@@ -79,6 +84,16 @@ namespace sgp.Models
         {
           lista.Add(pedido);
         }
+      }
+      return lista;
+    }
+
+    public List<Pedido> ListarEntregas()
+    {
+      List<Pedido> lista = new List<Pedido>();
+      foreach (var entrega in SetorEntregas)
+      {
+        lista.Add(entrega.Pedido);
       }
       return lista;
     }

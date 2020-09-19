@@ -323,7 +323,7 @@ namespace sgp.Services
           itemPedido = new ItemPedido(produto, quantidade);
         }
 
-        pedido.AdicionarItem(itemPedido);
+        pedido.Itens.Add(itemPedido);
 
         Console.Write("\n > Deseja adicionar outro produto ao pedido? (S/N): ");
         novoItem = Console.ReadLine().ToUpper();
@@ -499,6 +499,42 @@ namespace sgp.Services
         Console.Write("\nPressione Enter...");
         Console.ReadKey();
       }
+    }
+
+    public void ExibirEntregas()
+    {
+      if (!_controle.ExistemEntregas())
+      {
+        Console.WriteLine("Não existem entregas cadastradas!");
+        Console.Write("\nPressione Enter...");
+        Console.ReadKey();
+        return;
+      }
+      Console.WriteLine("".PadRight(100, '_'));
+      Console.WriteLine(
+          "COD.".PadRight(4, ' ') + " " +
+          "DATA".PadRight(16, ' ') + " " +
+          "CLIENTE".PadRight(24, ' ') + " " +
+          "ITENS".PadRight(7, ' ') + " " +
+          "LOJA".PadRight(19, ' ') + " " +
+          "STATUS".PadRight(10, ' ') + " " +
+          "TOTAL".PadRight(14, ' ')
+        );
+
+      foreach (var pedido in _controle.ListarEntregas())
+      {
+        Console.WriteLine(
+          $"{pedido.Codigo}".PadLeft(4, '0') + " " +
+          $"{pedido.Data.ToString("dd/MM/yyyy HH:mm")}".PadRight(16, '.') + " " +
+          $"{pedido.NomeCliente}".PadRight(24, '.') + " " +
+          $"{pedido.Itens.Count}".PadRight(7, '.') + " " +
+          $"{pedido.Loja.Nome}".PadRight(19, '.') + " " +
+          $"{pedido.Status}".PadRight(10, '.') + " " +
+          $"{pedido.ObterTotal().ToString("C")}".PadRight(14, '.')
+        );
+      }
+      Console.Write("\nPressione Enter...");
+      Console.ReadKey();
     }
   }
 }

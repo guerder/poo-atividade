@@ -32,16 +32,6 @@ namespace sgp.Models
       return total;
     }
 
-    public bool AdicionarItem(ItemPedido item)
-    {
-      if (this.Status == Status.Pendente)
-      {
-        this.Itens.Add(item);
-        return true;
-      }
-      return false;
-    }
-
     public void ConfirmarPedido()
     {
       this.Status = Status.Recebido;
