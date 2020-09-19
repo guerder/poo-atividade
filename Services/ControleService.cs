@@ -271,6 +271,16 @@ namespace sgp.Services
           return;
         }
         int quantidadeEmEstoque = _controle.BuscarEstoque(produto.Codigo).Quantidade;
+
+        if (quantidadeEmEstoque == 0)
+        {
+          Console.WriteLine("");
+          Console.WriteLine("Sem estoque do produto informado!");
+          Console.Write("\nPressione Enter...");
+          Console.ReadKey();
+          return;
+        }
+
         string msg = quantidadeEmEstoque == 1 ? $"Existe apenas {quantidadeEmEstoque} unidade " : $"Existem {quantidadeEmEstoque} unidades ";
         Console.WriteLine($"\n > {msg}do produto informado.");
 
