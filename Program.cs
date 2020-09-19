@@ -22,13 +22,12 @@ namespace sgp
         new Menu(8, "Lojas Cadastradas", 1),
         new Menu(9, "Cadastrar Produto", 2),
         new Menu(10, "Produtos Cadastrados", 2),
-        new Menu(11, "Excluir Produto", 2),
-        new Menu(12, "Realizar Pedido", 3),
-        new Menu(13, "Despachar Pedido", 3),
-        new Menu(14, "Visualizar Pedido", 3),
-        new Menu(15, "Pedidos Realizados", 3),
-        new Menu(16, "Listar Entregas", 4),
-        new Menu(17, "Confirmar entrega", 4),
+        new Menu(11, "Realizar Pedido", 3),
+        new Menu(12, "Despachar Pedido", 3),
+        new Menu(13, "Visualizar Pedido", 3),
+        new Menu(14, "Pedidos Realizados", 3),
+        new Menu(15, "Listar Entregas", 4),
+        new Menu(16, "Confirmar entrega", 4),
       };
 
       BuilderMenu builder = new BuilderMenu(menus);
@@ -38,6 +37,9 @@ namespace sgp
         var idMenu = builder.Build();
         switch (idMenu)
         {
+          case 5:
+            controleService.ResumoVendas();
+            break;
           case 6:
             controleService.ResumoGeral();
             break;
@@ -53,22 +55,22 @@ namespace sgp
           case 10:
             controleService.ExibirProdutos();
             break;
-          case 12:
+          case 11:
             controleService.RealizarPedido();
             break;
-          case 13:
+          case 12:
             controleService.DespacharPedido();
             break;
-          case 14:
+          case 13:
             controleService.VisualizarPedido();
             break;
-          case 15:
+          case 14:
             controleService.ExibirPedidos();
             break;
-          case 16:
+          case 15:
             controleService.ExibirEntregas();
             break;
-          case 17:
+          case 16:
             controleService.ConfirmarEntrega();
             break;
 
