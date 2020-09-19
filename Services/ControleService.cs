@@ -397,12 +397,16 @@ namespace sgp.Services
       Console.WriteLine("");
       Console.WriteLine("".PadRight(100, '_'));
       Console.WriteLine(
-          "Data:".PadRight(33, ' ') + pedido.Data.ToString("dd/MM/yyyy HH:mm") + "|" +
-          "Cliente:".PadRight(50 - pedido.NomeCliente.Length, ' ') + pedido.NomeCliente
+          "Status:".PadRight(49 - pedido.Status.ToString().Length, ' ') + pedido.Status + "|" +
+          "Data do pedido:".PadRight(34, ' ') + FormatDate(pedido.DataPedido)
         );
       Console.WriteLine(
-          "Status:".PadRight(49 - pedido.Status.ToString().Length, ' ') + pedido.Status + "|" +
-          "Vendedor:".PadRight(50 - pedido.NomeVendedor.Length, ' ') + pedido.NomeVendedor
+          "Cliente:".PadRight(49 - pedido.NomeCliente.Length, ' ') + pedido.NomeCliente + "|" +
+          "Data do despacho:".PadRight(34, ' ') + FormatDate(pedido.DataDespacho)
+        );
+      Console.WriteLine(
+          "Vendedor:".PadRight(49 - pedido.NomeVendedor.Length, ' ') + pedido.NomeVendedor + "|" +
+          "Data da entrega:".PadRight(34, ' ') + FormatDate(pedido.DataEntrega)
         );
 
       Console.WriteLine("".PadRight(100, '-'));
@@ -455,7 +459,7 @@ namespace sgp.Services
       {
         Console.WriteLine(
           $"{pedido.Codigo}".PadLeft(4, '0') + " " +
-          $"{pedido.Data.ToString("dd/MM/yyyy HH:mm")}".PadRight(16, '.') + " " +
+          $"{pedido.DataPedido.ToString("dd/MM/yyyy HH:mm")}".PadRight(16, '.') + " " +
           $"{pedido.NomeCliente}".PadRight(24, '.') + " " +
           $"{pedido.Itens.Count}".PadRight(7, '.') + " " +
           $"{pedido.Loja.Nome}".PadRight(19, '.') + " " +
@@ -536,7 +540,7 @@ namespace sgp.Services
       {
         Console.WriteLine(
           $"{pedido.Codigo}".PadLeft(4, '0') + " " +
-          $"{pedido.Data.ToString("dd/MM/yyyy HH:mm")}".PadRight(16, '.') + " " +
+          $"{pedido.DataPedido.ToString("dd/MM/yyyy HH:mm")}".PadRight(16, '.') + " " +
           $"{pedido.NomeCliente}".PadRight(24, '.') + " " +
           $"{pedido.Itens.Count}".PadRight(7, '.') + " " +
           $"{pedido.Loja.Nome}".PadRight(19, '.') + " " +
@@ -608,6 +612,15 @@ namespace sgp.Services
         Console.Write("\nPressione Enter...");
         Console.ReadKey();
       }
+    }
+
+    private string FormatDate(DateTime? date)
+    {
+      if (!date.HasValue)
+      {
+        return "";
+      }
+      return date.Value.ToString("dd/MM/yyyy HH:mm");
     }
   }
 }

@@ -9,7 +9,9 @@ namespace sgp.Models
   public class Pedido
   {
     public int Codigo { get; }
-    public DateTime Data { get; set; }
+    public DateTime DataPedido { get; set; }
+    public DateTime? DataDespacho { get; set; } = null;
+    public DateTime? DataEntrega { get; set; } = null;
     public string NomeCliente { get; set; }
     public string NomeVendedor { get; set; }
     public List<ItemPedido> Itens { get; }
@@ -19,7 +21,7 @@ namespace sgp.Models
     public Pedido(int codigo, string nomeCliente, string nomeVendedor)
     {
       this.Codigo = codigo;
-      this.Data = DateTime.Now;
+      this.DataPedido = DateTime.Now;
       this.NomeCliente = nomeCliente;
       this.NomeVendedor = nomeVendedor;
       this.Itens = new List<ItemPedido>();
@@ -40,11 +42,13 @@ namespace sgp.Models
     public void DespacharPedido()
     {
       this.Status = Status.Despachado;
+      this.DataDespacho = DateTime.Now;
     }
 
     public void FinalizarPedido()
     {
       this.Status = Status.Entregue;
+      this.DataEntrega = DateTime.Now;
     }
   }
 }
