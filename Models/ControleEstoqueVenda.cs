@@ -58,7 +58,7 @@ namespace sgp.Models
       int lastId = 0;
       try
       {
-        lastId = ListarProdutos().Select(x => x.Codigo).Max();
+        lastId = ListarEstoques().Select(x => x.Produto.Codigo).Max();
       }
       catch { }
       return ++lastId;
@@ -98,15 +98,15 @@ namespace sgp.Models
       return lista;
     }
 
-    public List<Produto> ListarProdutos()
+    public List<Estoque> ListarEstoques()
     {
-      List<Produto> lista = new List<Produto>();
+      List<Estoque> lista = new List<Estoque>();
 
       foreach (var loja in Lojas)
       {
         foreach (var estoque in loja.Estoques)
         {
-          lista.Add(estoque.Produto);
+          lista.Add(estoque);
         }
       }
       return lista;

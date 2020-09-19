@@ -96,13 +96,21 @@ namespace sgp.Services
 
       int nextId = _controle.nextIdProduto();
       Produto produto = new Produto(nextId, description, value);
-      loja.Estoques.Add(new Estoque(produto, qtd));
+      loja.Estoques.Add(new Estoque(produto, qtd, loja));
       Save();
     }
 
     public void ExibirProdutos()
     {
-      if (_controle.ListarProdutos().Count == 0)
+      ListarProdutos();
+
+      Console.Write("\nPressione Enter...");
+      Console.ReadKey();
+    }
+
+    private void ListarProdutos()
+    {
+      if (_controle.ListarEstoques().Count == 0)
       {
         Console.WriteLine("Não existem produtos cadastrados!");
         Console.Write("\nPressione Enter...");
@@ -111,52 +119,27 @@ namespace sgp.Services
       }
       Console.WriteLine("".PadRight(100, '_'));
       Console.WriteLine(
-          "CÓDIGO".PadRight(19, ' ') + " " +
+          "CÓDIGO".PadRight(9, ' ') + " " +
           "PRODUTO".PadRight(29, ' ') + " " +
           "VALOR".PadRight(19, ' ') + " " +
           "QUANT.".PadRight(9, ' ') + " " +
-          "LOJA".PadRight(20, ' ')
+          "LOJA".PadRight(30, ' ')
         );
-      foreach (var loja in _controle.GetLojas())
+      foreach (var estoque in _controle.ListarEstoques())
       {
-        foreach (var estoque in loja.Estoques)
-        {
-          Console.WriteLine(
-              $"{estoque.Produto.Codigo}".PadRight(19, '.') + " " +
-              $"{estoque.Produto.Nome}".PadRight(29, '.') + " " +
-              $"{estoque.Produto.Preco.ToString("C")}".PadRight(19, '.') + " " +
-              $"{estoque.Quantidade}".PadRight(9, '.') + " " +
-              $"{loja.Nome}".PadRight(20, '.')
-            );
-        }
+        Console.WriteLine(
+            $"{estoque.Produto.Codigo}".PadLeft(9, '0') + " " +
+            $"{estoque.Produto.Nome}".PadRight(29, '.') + " " +
+            $"{estoque.Produto.Preco.ToString("C")}".PadRight(19, '.') + " " +
+            $"{estoque.Quantidade}".PadRight(9, '.') + " " +
+            $"{estoque.Loja.Nome}".PadRight(30, '.')
+          );
       }
-      Console.Write("\nPressione Enter...");
-      Console.ReadKey();
     }
 
     public Produto SelecionarProduto()
     {
-      if (_controle.ListarProdutos().Count == 0)
-      {
-        Console.WriteLine("");
-        Console.WriteLine("Não existem produtos cadastrados!");
-        Console.ReadKey();
-        return null;
-      }
-      Console.WriteLine("".PadRight(100, '_'));
-      Console.WriteLine(
-          "CÓDIGO".PadRight(33, ' ') +
-          "PRODUTO".PadRight(33, ' ') +
-          "VALOR".PadRight(33, ' ')
-        );
-      foreach (var prod in _controle.ListarProdutos())
-      {
-        Console.WriteLine(
-            $"{prod.Codigo}".PadRight(33, '.') +
-            $"{prod.Nome}".PadRight(33, '.') +
-            $"R$ {prod.Preco}".PadRight(33, '.')
-          );
-      }
+      ListarProdutos();
 
       int codigo;
       Console.Write("\n > Digite o código do produto: ");
@@ -168,7 +151,7 @@ namespace sgp.Services
       {
         codigo = -1;
       }
-      Produto produto = _controle.ListarProdutos().FirstOrDefault(x => x.Codigo == codigo);
+      Produto produto = _controle.ListarEstoques().FirstOrDefault(x => x.Produto.Codigo == codigo).Produto;
       return produto;
     }
 
@@ -424,7 +407,7 @@ namespace sgp.Services
         Console.WriteLine(
           $"{item.Produto.Codigo}".PadLeft(9, '0') + " " +
           $"{item.Produto.Nome}".PadRight(29, '.') + " " +
-          $"R$ {item.Produto.Preco}".PadRight(19, '.') + " " +
+          $"{item.Produto.Preco.ToString("C")}".PadRight(19, '.') + " " +
           $"{item.Quantidade}".PadRight(9, '.') + " " +
           $"{item.Desconto}%".PadRight(9, '.') + " " +
           $"{item.ObterTotalItem().ToString("C")}".PadRight(20, '.')
