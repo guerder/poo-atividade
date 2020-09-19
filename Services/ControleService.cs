@@ -663,6 +663,45 @@ namespace sgp.Services
       Console.ReadKey();
     }
 
+    public void ResumoVendas()
+    {
+      double valorEmEstoque = _controle.ListarEstoques()
+        .Aggregate((double)0, (acc, current) =>
+          acc + (current.Produto.Preco * current.Quantidade)
+        );
+      double faturamento = _controle.ListarPedidos()
+        .Aggregate((double)0, (acc, current) =>
+          acc + current.ObterTotal()
+        );
+
+      int numeroPedidos = _controle.ListarPedidos().Count;
+
+      Console.WriteLine("".PadRight(30, ' ') + "".PadRight(40, '-') + "".PadRight(30, ' '));
+
+      Console.WriteLine("".PadLeft(30, ' ') +
+        $"Valor em estoque:".PadRight(20, ' ') +
+        $"{valorEmEstoque.ToString("C")}".PadLeft(20, ' '));
+      Console.WriteLine("".PadRight(30, ' ') + "".PadRight(40, '-') + "".PadRight(30, ' '));
+
+      Console.WriteLine("".PadLeft(30, ' ') +
+        $"Faturamento:".PadRight(20, ' ') +
+        $"{faturamento.ToString("C")}".PadLeft(20, ' '));
+      Console.WriteLine("".PadRight(30, ' ') + "".PadRight(40, '-') + "".PadRight(30, ' '));
+
+      Console.WriteLine("".PadLeft(30, ' ') +
+        $"Nº de pedidos:".PadRight(20, ' ') +
+        $"{numeroPedidos}".PadLeft(20, ' '));
+      Console.WriteLine("".PadRight(30, ' ') + "".PadRight(40, '-') + "".PadRight(30, ' '));
+
+      Console.WriteLine("".PadLeft(30, ' ') +
+            $"Ticket Médio:".PadRight(20, ' ') +
+            $"{(faturamento / numeroPedidos).ToString("C")}".PadLeft(20, ' '));
+      Console.WriteLine("".PadRight(30, ' ') + "".PadRight(40, '-') + "".PadRight(30, ' '));
+
+      Console.Write("\nPressione Enter...");
+      Console.ReadKey();
+    }
+
     private string FormatDate(DateTime? date)
     {
       if (!date.HasValue)
