@@ -38,6 +38,9 @@ namespace sgp
         var idMenu = builder.Build();
         switch (idMenu)
         {
+          case 6:
+            controleService.ResumoGeral();
+            break;
           case 7:
             controleService.CadastrarLoja();
             break;

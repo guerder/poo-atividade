@@ -607,6 +607,62 @@ namespace sgp.Services
       }
     }
 
+    public void ResumoGeral()
+    {
+      int numeroLojas = _controle.Lojas.Count;
+      int numeroProdutosCadastrados = _controle.ListarEstoques().Count;
+      int numeroItens = _controle.ListarEstoques().Aggregate((int)0, (acc, current) => acc + current.Quantidade);
+      int numeroPedidos = _controle.ListarPedidos().Count;
+
+      var recebido = _controle.ListarPedidos().Where(x => x.Status == Status.Recebido).Count();
+      int despachado = _controle.ListarPedidos().Where(x => x.Status == Status.Despachado).Count();
+      int entregue = _controle.ListarPedidos().Where(x => x.Status == Status.Entregue).Count();
+
+      Console.WriteLine("".PadRight(30, ' ') + "".PadRight(40, '-') + "".PadRight(30, ' '));
+
+      Console.WriteLine("".PadLeft(30, ' ') +
+        $"Nº de lojas:".PadRight(20, ' ') +
+        $"{numeroLojas}".PadLeft(20, ' '));
+      Console.WriteLine("".PadRight(30, ' ') + "".PadRight(40, '-') + "".PadRight(30, ' '));
+
+      Console.WriteLine("".PadLeft(30, ' ') +
+        $"Nº de produtos:".PadRight(20, ' ') +
+        $"{numeroProdutosCadastrados}".PadLeft(20, ' '));
+      Console.WriteLine("".PadRight(30, ' ') + "".PadRight(40, '-') + "".PadRight(30, ' '));
+
+      Console.WriteLine("".PadLeft(30, ' ') +
+        $"Nº de itens total:".PadRight(20, ' ') +
+        $"{numeroItens}".PadLeft(20, ' '));
+      Console.WriteLine("".PadRight(30, ' ') + "".PadRight(40, '-') + "".PadRight(30, ' '));
+
+
+      // Número de pedidos + Descrição em porcentagem por status do pedido.
+      Console.WriteLine("".PadLeft(30, ' ') +
+        $"Nº de pedidos:".PadRight(20, ' ') +
+        $"{numeroPedidos}".PadLeft(20, ' '));
+
+      Console.WriteLine("");
+      Console.WriteLine("".PadLeft(30, ' ') +
+        "RECEBIDO:".PadRight(20, '.') +
+        $"({Math.Round(((double)recebido / numeroPedidos) * 100)}%) {recebido}".PadLeft(20, '.')
+      );
+
+      Console.WriteLine("".PadLeft(30, ' ') +
+       "DESPACHADO:".PadRight(20, '.') +
+       $"({Math.Round(((double)despachado / numeroPedidos) * 100)}%) {despachado}".PadLeft(20, '.')
+      );
+
+      Console.WriteLine("".PadLeft(30, ' ') +
+       "ENTREGUE:".PadRight(20, '.') +
+       $"({Math.Round(((double)entregue / numeroPedidos) * 100)}%) {entregue}".PadLeft(20, '.')
+      );
+
+      Console.WriteLine("".PadRight(30, ' ') + "".PadRight(40, '-') + "".PadRight(30, ' '));
+
+      Console.Write("\nPressione Enter...");
+      Console.ReadKey();
+    }
+
     private string FormatDate(DateTime? date)
     {
       if (!date.HasValue)
