@@ -42,8 +42,15 @@ namespace sgp.Models
       {
         if (item.Parent == parent)
         {
-          Console.WriteLine($"{number}. {item.Name}");
-          numbersOption.Add(number, item.Id);
+          if (item.Name.Trim().Equals(""))
+          {
+            numbersOption.Add(number, item.Id);
+          }
+          else
+          {
+            numbersOption.Add(number, item.Id);
+            Console.WriteLine($"{number}. {item.Name}");
+          }
           number++;
         }
       }

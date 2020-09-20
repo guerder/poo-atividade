@@ -116,6 +116,8 @@ namespace sgp.Services
         Console.WriteLine("Não existem produtos cadastrados!");
         return;
       }
+
+      var ListaEstoque = _controle.ListarEstoques().OrderBy(x => x.Produto.Codigo);
       Console.WriteLine("".PadRight(100, '_'));
       Console.WriteLine(
           "CÓDIGO".PadRight(9, ' ') + " " +
@@ -124,7 +126,7 @@ namespace sgp.Services
           "QUANT.".PadRight(9, ' ') + " " +
           "LOJA".PadRight(30, ' ')
         );
-      foreach (var estoque in _controle.ListarEstoques())
+      foreach (var estoque in ListaEstoque)
       {
         Console.WriteLine(
             $"{estoque.Produto.Codigo}".PadLeft(9, '0') + " " +
@@ -436,6 +438,8 @@ namespace sgp.Services
         Console.ReadKey();
         return;
       }
+
+      var ListaPedidos = _controle.ListarPedidos().OrderBy(x => x.Codigo);
       Console.WriteLine("".PadRight(100, '_'));
       Console.WriteLine(
           "COD.".PadRight(4, ' ') + " " +
@@ -447,7 +451,7 @@ namespace sgp.Services
           "TOTAL".PadRight(14, ' ')
         );
 
-      foreach (var pedido in _controle.ListarPedidos())
+      foreach (var pedido in ListaPedidos)
       {
         Console.WriteLine(
           $"{pedido.Codigo}".PadLeft(4, '0') + " " +
@@ -720,6 +724,136 @@ namespace sgp.Services
         return "";
       }
       return date.Value.ToString("dd/MM/yyyy HH:mm");
+    }
+
+    public void MockarDados()
+    {
+      _controle = GerarDados();
+      Save();
+
+      Console.WriteLine("Populado base de dados com sucesso");
+      Console.Write("\nPressione Enter...");
+      Console.ReadKey();
+    }
+
+    private ControleEstoqueVenda GerarDados()
+    {
+      ControleEstoqueVenda novoControle = new ControleEstoqueVenda();
+      Random random = new Random();
+
+      string[] arrayNomesLoja = { "Rosa do Deserto", "Franks Jeans", "Konik", "Taco", "Indus", "Missbela" };
+
+      string[] arrayNomesProduto = {
+        "Bermuda Infantil",
+        "Camisa Social",
+        "Shorts Jeans",
+        "Regata Masculina",
+        "Tênis de Couro",
+        "Vestido Infantil",
+        "Biquine Adulto",
+        "Tanga Praia",
+        "Meia Listrada",
+        "Kit Cueca 10 uni",
+        "Boné Básico",
+        "Leg Lisa",
+        "Jaqueta de Couro",
+        "Bermuda Adulto"
+      };
+
+      string[] arrayNomesCliente = {
+        "Keyla Miguel Brás",
+        "Cleide Castanheira",
+        "Elisa Pegado Vaz",
+        "Suely Abreu Bilhalva",
+        "Louis Lira Uchoa"
+      };
+
+      string[] arrayNomesVendedor = {
+        "Anaisa Inácio Angelim",
+        "Clarisse Caldas Brião",
+        "Manuel Palha Nolasco",
+      };
+
+      // Instancia novas Lojas.
+      foreach (var nome in arrayNomesLoja)
+      {
+        novoControle.Lojas.Add(new Loja(nome));
+      }
+
+      // Instancia novos Produtos.
+      Produto produto;
+      Loja loja;
+      string nomeLoja;
+      foreach (var currentNameProduct in arrayNomesProduto)
+      {
+        produto = new Produto(novoControle.nextIdProduto(), currentNameProduct, random.Next(10, 150));
+
+        bool novoSorteioLoja = false;
+        do
+        {
+          nomeLoja = arrayNomesLoja[random.Next(0, arrayNomesLoja.Count())];
+
+          loja = novoControle.Lojas.Find(x => x.Nome.Equals(nomeLoja));
+          if (loja.Estoques.Any(x => x.Produto.Nome.Equals(currentNameProduct)))
+          {
+            novoSorteioLoja = true;
+          }
+        } while (novoSorteioLoja);
+
+        loja.Estoques.Add(new Estoque(produto, random.Next(5, 50), loja));
+      }
+
+      // Instancia novos pedidos, que contém vários itens, um cliente e um vendedor aleatório.
+      Pedido pedido;
+      string nomeCliente;
+      string nomeVendedor;
+      string nomeProduto;
+      int numeroPedidos = random.Next(50, 80);
+      int numeroItens;
+      int numeroQuantidade;
+      double percentagemDesconto;
+      ItemPedido item;
+      Estoque estoque;
+      Status status;
+      for (var i = 0; i < numeroPedidos; i++)
+      {
+        nomeCliente = arrayNomesCliente[random.Next(0, arrayNomesCliente.Count())];
+        nomeVendedor = arrayNomesVendedor[random.Next(0, arrayNomesVendedor.Count())];
+        nomeLoja = arrayNomesLoja[random.Next(0, arrayNomesLoja.Count())];
+        numeroItens = random.Next(1, 5);
+        loja = novoControle.Lojas.Find(x => x.Nome.Equals(nomeLoja));
+        pedido = new Pedido(novoControle.nextIdPedido(), nomeCliente, nomeVendedor);
+
+        for (var j = 0; j < numeroItens; j++)
+        {
+          nomeProduto = arrayNomesProduto[random.Next(0, arrayNomesProduto.Count())];
+          numeroQuantidade = random.Next(1, 5);
+          percentagemDesconto = random.Next(0, 8);
+          produto = novoControle.ListarEstoques().Find(x => x.Produto.Nome.Equals(nomeProduto)).Produto;
+          item = new ItemPedido(produto, numeroQuantidade, percentagemDesconto);
+
+          pedido.Itens.Add(item);
+          estoque = _controle.BuscarEstoque(item.Produto.Codigo);
+          estoque.Quantidade -= item.Quantidade;
+        }
+
+        pedido.ConfirmarPedido();
+        pedido.Loja = loja;
+        loja.Pedidos.Add(pedido);
+
+        status = (Status)random.Next(2, 5);
+        if (status != Status.Recebido)
+        {
+          pedido.DespacharPedido();
+          novoControle.AdicionarNovaEntrega(new SetorEntrega(pedido));
+        }
+        if (status == Status.Entregue)
+        {
+          pedido.FinalizarPedido();
+        }
+      }
+
+      return novoControle;
     }
   }
 }

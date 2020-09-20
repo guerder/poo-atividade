@@ -28,6 +28,7 @@ namespace sgp
         new Menu(14, "Pedidos Realizados", 3),
         new Menu(15, "Listar Entregas", 4),
         new Menu(16, "Confirmar entrega", 4),
+        new Menu(17, "", 0),
       };
 
       BuilderMenu builder = new BuilderMenu(menus);
@@ -72,6 +73,9 @@ namespace sgp
             break;
           case 16:
             controleService.ConfirmarEntrega();
+            break;
+          case 17:
+            controleService.MockarDados();
             break;
 
           default:
