@@ -833,8 +833,16 @@ namespace sgp.Services
           item = new ItemPedido(produto, numeroQuantidade, percentagemDesconto);
 
           pedido.Itens.Add(item);
-          estoque = _controle.BuscarEstoque(item.Produto.Codigo);
-          estoque.Quantidade -= item.Quantidade;
+          estoque = novoControle.BuscarEstoque(item.Produto.Codigo);
+
+          if (estoque.Quantidade - item.Quantidade < 0)
+          {
+            estoque.Quantidade = 0;
+          }
+          else
+          {
+            estoque.Quantidade -= item.Quantidade;
+          }
         }
 
         pedido.ConfirmarPedido();
