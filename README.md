@@ -18,3 +18,7 @@ Abaixo estão listadas as features necessárias para conclusão da atividade.
 ### Desafio:
 
 - [x] Como salvar estes dados?
+
+`Observação: Para popular a base de dados deve acessar a opção oculta no menu principal, que está configurada para o nº 7, conforme mostra a imagem abaixo.`
+
+![popular base de dados](https://raw.githubusercontent.com/guerder/sgp/master/assets/popular-base.gif)
