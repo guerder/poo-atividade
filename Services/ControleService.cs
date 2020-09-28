@@ -4,49 +4,18 @@ using System.Runtime.Serialization.Formatters.Binary;
 using sgp.Models;
 using System.Linq;
 using sgp.Models.Enums;
+using sgp.Data;
 
 namespace sgp.Services
 {
   public class ControleService
   {
     private static ControleEstoqueVenda _controle { get; set; }
+    Persistence persistence = Persistence.GetInstance;
 
     public ControleService()
     {
-      _controle = new ControleEstoqueVenda();
-
-      // Abre o arquivo para ler os dados
-      try
-      {
-        FileStream fs = new FileStream("data.bin", FileMode.Open);
-        // Cria um objeto BinaryFormatter para realizar a dessarialização
-        BinaryFormatter bf = new BinaryFormatter();
-        // Usa o objeto BinaryFormatter para desserializar os dados do arquivo
-        _controle = (ControleEstoqueVenda)bf.Deserialize(fs);
-        // fecha o arquivo
-        fs.Close();
-      }
-      catch { }
-    }
-
-    private void Save()
-    {
-      try
-      {
-        // Cria um arquivo para salvar os dados
-        FileStream fs = new FileStream("data.bin", FileMode.Create);
-        // Cria um objeto BinaryFormatter para realizar a serialização
-        BinaryFormatter bf = new BinaryFormatter();
-        // Usa o objeto BinaryFormatter para serializar os dados para o arquivo
-        bf.Serialize(fs, _controle);
-        // fecha o arquivo
-        fs.Close();
-      }
-      catch (Exception e)
-      {
-        Console.WriteLine("erro na gravação dos dados: " + e);
-        Console.ReadKey();
-      }
+      _controle = persistence.GetControle();
     }
 
     public void CadastrarProduto()
@@ -98,7 +67,7 @@ namespace sgp.Services
       int nextId = _controle.nextIdProduto();
       Produto produto = new Produto(nextId, description, value);
       loja.Estoques.Add(new Estoque(produto, qtd, loja));
-      Save();
+      persistence.Save();
     }
 
     public void ExibirProdutos()
@@ -220,7 +189,7 @@ namespace sgp.Services
 
       Loja loja = new Loja(nome);
       _controle.AdicionarLoja(loja);
-      Save();
+      persistence.Save();
     }
 
     public void RealizarPedido()
@@ -344,7 +313,7 @@ namespace sgp.Services
         pedido.ConfirmarPedido();
         pedido.Loja = loja;
         loja.Pedidos.Add(pedido);
-        Save();
+        persistence.Save();
       }
     }
 
@@ -503,7 +472,7 @@ namespace sgp.Services
       {
         pedido.DespacharPedido();
         _controle.AdicionarNovaEntrega(new SetorEntrega(pedido));
-        Save();
+        persistence.Save();
 
         Console.WriteLine("");
         Console.WriteLine("Despacho realizado com sucesso!");
@@ -601,7 +570,7 @@ namespace sgp.Services
       if (confirmarEntrega == "S")
       {
         entrega.FinalizarPedido();
-        Save();
+        persistence.Save();
 
         Console.WriteLine("");
         Console.WriteLine("Entrega realizada com sucesso!");
@@ -729,7 +698,7 @@ namespace sgp.Services
     public void MockarDados()
     {
       _controle = GerarDados();
-      Save();
+      persistence.Save();
 
       Console.WriteLine("Populado base de dados com sucesso");
       Console.Write("\nPressione Enter...");
