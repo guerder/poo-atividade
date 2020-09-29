@@ -12,6 +12,8 @@ namespace sgp.Services
   {
     private static ControleEstoqueVenda _controle = Persistence.GetInstance.GetControle();
 
+    private LojaService _lojaService { get; set; } = new LojaService();
+
     public void CadastrarProduto()
     {
       if (!_controle.ExisteLoja())
@@ -121,7 +123,7 @@ namespace sgp.Services
 
     public void ExibirLojas()
     {
-      if (_controle.GetLojas().Count == 0)
+      if (_lojaService.ListarLojas().Count == 0)
       {
         Console.WriteLine("Não existem lojas cadastradas!");
         Console.Write("\nPressione Enter...");
@@ -129,9 +131,9 @@ namespace sgp.Services
         return;
       }
 
-      for (int i = 0; i < _controle.GetLojas().Count; i++)
+      for (int i = 0; i < _lojaService.ListarLojas().Count; i++)
       {
-        Console.WriteLine($"{i + 1}. {_controle.GetLojas()[i].Nome}");
+        Console.WriteLine($"{i + 1}. {_lojaService.ListarLojas()[i].Nome}");
       }
       Console.Write("\nPressione Enter...");
       Console.ReadKey();
