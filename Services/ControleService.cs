@@ -10,13 +10,7 @@ namespace sgp.Services
 {
   public class ControleService
   {
-    private static ControleEstoqueVenda _controle { get; set; }
-    Persistence persistence = Persistence.GetInstance;
-
-    public ControleService()
-    {
-      _controle = persistence.GetControle();
-    }
+    private static ControleEstoqueVenda _controle = Persistence.GetInstance.GetControle();
 
     public void CadastrarProduto()
     {
@@ -67,7 +61,7 @@ namespace sgp.Services
       int nextId = _controle.nextIdProduto();
       Produto produto = new Produto(nextId, description, value);
       loja.Estoques.Add(new Estoque(produto, qtd, loja));
-      persistence.Save();
+      Persistence.GetInstance.Save();
     }
 
     public void ExibirProdutos()
@@ -189,7 +183,7 @@ namespace sgp.Services
 
       Loja loja = new Loja(nome);
       _controle.AdicionarLoja(loja);
-      persistence.Save();
+      Persistence.GetInstance.Save();
     }
 
     public void RealizarPedido()
@@ -313,7 +307,7 @@ namespace sgp.Services
         pedido.ConfirmarPedido();
         pedido.Loja = loja;
         loja.Pedidos.Add(pedido);
-        persistence.Save();
+        Persistence.GetInstance.Save();
       }
     }
 
@@ -472,7 +466,7 @@ namespace sgp.Services
       {
         pedido.DespacharPedido();
         _controle.AdicionarNovaEntrega(new SetorEntrega(pedido));
-        persistence.Save();
+        Persistence.GetInstance.Save();
 
         Console.WriteLine("");
         Console.WriteLine("Despacho realizado com sucesso!");
@@ -570,7 +564,7 @@ namespace sgp.Services
       if (confirmarEntrega == "S")
       {
         entrega.FinalizarPedido();
-        persistence.Save();
+        Persistence.GetInstance.Save();
 
         Console.WriteLine("");
         Console.WriteLine("Entrega realizada com sucesso!");
@@ -698,7 +692,7 @@ namespace sgp.Services
     public void MockarDados()
     {
       _controle = GerarDados();
-      persistence.Save();
+      Persistence.GetInstance.Save();
 
       Console.WriteLine("Populado base de dados com sucesso");
       Console.Write("\nPressione Enter...");

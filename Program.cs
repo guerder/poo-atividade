@@ -7,7 +7,7 @@ namespace sgp
 {
   class Program
   {
-    static ControleService controleService = new ControleService();
+    private static ControleService controleService = new ControleService();
     static void Main(string[] args)
     {
 
